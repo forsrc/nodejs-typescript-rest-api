@@ -7,6 +7,7 @@ class DbUtils {
 
     private static INSTANCE: DbUtils;
     private db: sqlite.Database;
+    private static debug: boolean = false;
 
     private constructor() {
     }
@@ -19,6 +20,9 @@ class DbUtils {
         return this.INSTANCE;
     }
 
+    public static setDebug(debug: boolean) {
+        this.debug = debug;
+    }
     public async setDb(db: string) {
         if (this.db) {
             await this.close();
@@ -53,7 +57,7 @@ class DbUtils {
                     reject(err)
                     return;
                 }
-                console.log("[run] -->", this);
+                if (DbUtils.debug) console.log("[run] -->", this);
                 resolve({ id: this.lastID, changes: this.changes });
 
             });
@@ -69,7 +73,7 @@ class DbUtils {
                     reject(err)
                     return;
                 }
-                console.log("[all] ", sql, " --> ", rows);
+                if (DbUtils.debug) console.log("[all] ", sql, " --> ", rows);
                 if (!rows) {
                     return;
                 }
@@ -100,14 +104,14 @@ class DbUtils {
             this.db.all(sql, params, (err, rows) => {
                 if (err) {
                     console.log('[ERROR] sql ' + sql);
-                    reject(err)
+                    reject(err);
                     return;
                 }
-                console.log("[get] ", sql, " --> ", rows);
+                if (DbUtils.debug) console.log("[get] ", sql, " --> ", rows);
                 if (!rows) {
                     return;
                 }
-                resolve(rows)
+                resolve(rows);
             });
         });
         return resolve;
@@ -134,17 +138,14 @@ class DbUtils {
 
             let sql: string = `INSERT INTO ${table} (${namesSql}) VALUES (${valuesSql})`;
 
-            this.db.all(sql, params, (err, rows) => {
+            this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.log('[ERROR] sql ', sql, err);
-                    reject(err)
+                    console.error('[ERROR] sql ', sql, err);
+                    reject(err);
                     return;
                 }
-                console.log("[get] ", sql, " --> ", rows);
-                if (!rows) {
-                    return;
-                }
-                resolve(rows)
+                if (DbUtils.debug) console.log("[insert] ", sql, " --> ", this);
+                resolve({ lastID: this.lastID, changes: this.changes });
             });
         });
         return resolve;
@@ -175,17 +176,14 @@ class DbUtils {
 
             let sql: string = `UPDATE ${table} SET ${setSql} WHERE ${whereSql}`;
 
-            this.db.all(sql, params, (err, rows) => {
+            this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.log('[ERROR] sql ', sql, err);
-                    reject(err)
+                    console.error('[ERROR] sql ', sql, err);
+                    reject(err);
                     return;
                 }
-                console.log("[get] ", sql, " --> ", rows);
-                if (!rows) {
-                    return;
-                }
-                resolve(rows)
+                if (DbUtils.debug) console.log("[update] ", sql, " --> ", this);
+                resolve({ lastID: this.lastID, changes: this.changes });
             });
         });
         return resolve;
@@ -208,17 +206,14 @@ class DbUtils {
 
             let sql: string = `DELETE FROM ${table} WHERE ${whereSql}`;
 
-            this.db.all(sql, params, (err, rows) => {
+            this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.log('[ERROR] sql ' + sql);
-                    reject(err)
+                    console.error('[ERROR] sql ', sql, err);
+                    reject(err);
                     return;
                 }
-                console.log("[get] ", sql, " --> ", rows);
-                if (!rows) {
-                    return;
-                }
-                resolve(rows)
+                if (DbUtils.debug) console.log("[delete] ", sql, " --> ", this);
+                resolve({ lastID: this.lastID, changes: this.changes });
             });
         });
         return resolve;
