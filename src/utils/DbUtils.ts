@@ -53,7 +53,7 @@ class DbUtils {
         let resolve: Promise<any> = new Promise<any>((resolve, reject) => {
             this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.log('[ERROR] sql ' + sql);
+                    console.error('[ERROR] sql ', sql, err);
                     reject(err)
                     return;
                 }
@@ -69,7 +69,7 @@ class DbUtils {
         let resolve: Promise<any> = new Promise<any>((resolve, reject) => {
             this.db.all(sql, params, (err, rows) => {
                 if (err) {
-                    console.log('[ERROR] sql ' + sql);
+                    console.error('[ERROR] sql ', sql, err);
                     reject(err)
                     return;
                 }
@@ -103,7 +103,7 @@ class DbUtils {
 
             this.db.all(sql, params, (err, rows) => {
                 if (err) {
-                    console.log('[ERROR] sql ' + sql);
+                    console.error('[ERROR] sql ', sql, err);
                     reject(err);
                     return;
                 }

@@ -1,17 +1,17 @@
-import BaseDao from "../dao/BaseDao";
 
-interface BaseService<PK, MODEL> {
+
+interface BaseService<MODEL> {
 
 
     list(): Promise<Array<MODEL>>;
 
-    save(model: MODEL): Promise<PK>;
+    save(model: MODEL): Promise<MODEL>;
 
-    get(pk: PK): Promise<MODEL>;
+    get(pk: any): Promise<MODEL>;
 
-    update(pk: PK, model: MODEL): Promise<MODEL>;
+    update(model: MODEL): Promise<MODEL>;
 
-    delete(pk: PK): Promise<void>;
+    delete(pk: any): Promise<void>;
 }
 
 

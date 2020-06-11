@@ -3,12 +3,15 @@ import User from '../model/User';
 import BaseDaoImpl from './BaseDaoImpl';
 
 
-class UserDao extends BaseDaoImpl<any, User> implements BaseDao<any, User> {
+class UserDao extends BaseDaoImpl<User> implements BaseDao<User> {
 
     public getTableName(): string {
         return 'user';
     }
 
+    public getPk(): string[] {
+        return ["username"];
+    }
 
 }
 

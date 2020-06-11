@@ -1,13 +1,12 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser'
 import cors from 'cors'
-import UserController from './controller/UserController';
-import UseRoleController from './controller/UserRoleController';
+import Init from './Init';
+
 
 class Router {
 
-    userController = new UserController();
-    userRoleController = new UseRoleController();
+    userController = Init.userController;
+    userRoleController = Init.userRoleController;
 
     constructor(app: express.Express) {
         const router = express.Router()

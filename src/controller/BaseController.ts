@@ -2,7 +2,7 @@ import * as express from 'express'
 
 
 
-interface BaseController {
+interface BaseController<MODEL> {
 
     list(req: express.Request, res: express.Response): void;
 

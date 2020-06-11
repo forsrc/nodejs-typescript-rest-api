@@ -4,11 +4,11 @@ import BaseDao from '../dao/BaseDao';
 
 
 
-abstract class BaseServiceImpl<PK, MODEL> implements BaseService<PK, MODEL> {
+abstract class BaseServiceImpl<MODEL> implements BaseService<MODEL> {
 
-    baseDao: BaseDao<PK, MODEL>;
+    baseDao: BaseDao<MODEL>;
 
-    constructor(baseDao: BaseDao<PK, MODEL>) {
+    constructor(baseDao: BaseDao<MODEL>) {
         this.list = this.list.bind(this);
         this.save = this.save.bind(this);
         this.get = this.get.bind(this);
@@ -21,19 +21,19 @@ abstract class BaseServiceImpl<PK, MODEL> implements BaseService<PK, MODEL> {
         return await this.baseDao.list();
     }
 
-    async save(model: MODEL): Promise<PK> {
+    async save(model: MODEL): Promise<MODEL> {
         return await this.baseDao.save(model);
     }
 
-    async get(pk: PK): Promise<MODEL> {
+    async get(pk: any): Promise<MODEL> {
         return this.baseDao.get(pk);
     }
 
-    async update(pk: PK, model: MODEL): Promise<MODEL> {
-        return this.baseDao.update(pk, model);
+    async update(model: MODEL): Promise<MODEL> {
+        return this.baseDao.update(model);
     }
 
-    delete(pk: PK): Promise<void> {
+    delete(pk: any): Promise<void> {
         return this.baseDao.delete(pk);
     }
 }

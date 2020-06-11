@@ -6,7 +6,7 @@ import BaseDao from './BaseDao';
 import DbUtils from '../utils/DbUtils';
 
 
-abstract class BaseDaoImpl<PK, MODEL> implements BaseDao<PK, MODEL> {
+abstract class BaseDaoImpl<MODEL> implements BaseDao<MODEL> {
 
 
     public db: sqlite.Database = new sqlite3.Database(config.db, () => { });
@@ -21,27 +21,45 @@ abstract class BaseDaoImpl<PK, MODEL> implements BaseDao<PK, MODEL> {
 
     public abstract getTableName(): string;
 
+    public abstract getPk(): string[];
+
     async list(): Promise<Array<MODEL>> {
-        let sql: string = `SELECT * from ${this.getTableName()}`;
+        let sql: string = `SELECT * FROM ${this.getTableName()}`;
 
         return await DbUtils.getInstance().all(sql, []);
     }
 
-    async save(model: MODEL): Promise<PK> {
-        let sql: string = `SELECT * from ${this.getTableName()}`;
+    async save(model: MODEL): Promise<MODEL> {
 
         return await DbUtils.getInstance().insert(this.getTableName(), model);
     }
 
-    async get(pk: PK): Promise<MODEL> {
+    async get(pk: any): Promise<MODEL> {
+        for (let key in this.getPk()) {
+            if (!pk[this.getPk()[key]]) {
+                return Promise.reject({ error: `${key} is empty` });
+            }
+        }
         return await DbUtils.getInstance().get(this.getTableName(), pk);
     }
 
-    async update(pk: PK, model: MODEL): Promise<MODEL> {
+    async update(model: MODEL): Promise<MODEL> {
+        let pk: any = {};
+        for (let key in this.getPk()) {
+            if (!model[this.getPk()[key]]) {
+                return Promise.reject({ error: `${key} is empty` });
+            }
+            pk[key] = model[key];
+        }
         return await DbUtils.getInstance().update(this.getTableName(), model, pk);
     }
 
-    async delete(pk: PK): Promise<void> {
+    async delete(pk: any): Promise<void> {
+        for (let key in this.getPk()) {
+            if (!pk[this.getPk()[key]]) {
+                return Promise.reject({ error: `${key} is empty` });
+            }
+        }
         return await DbUtils.getInstance().delete(this.getTableName(), pk);
     }
 }
