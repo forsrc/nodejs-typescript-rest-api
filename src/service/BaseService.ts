@@ -3,11 +3,11 @@
 interface BaseService<MODEL> {
 
 
-    list(): Promise<Array<MODEL>>;
+    list(): Promise<MODEL[]>;
 
     save(model: MODEL): Promise<MODEL>;
 
-    get(pk: any): Promise<MODEL>;
+    get(pk: any): Promise<MODEL[]>;
 
     update(model: MODEL): Promise<MODEL>;
 

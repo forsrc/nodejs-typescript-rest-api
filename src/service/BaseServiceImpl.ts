@@ -17,7 +17,7 @@ abstract class BaseServiceImpl<MODEL> implements BaseService<MODEL> {
         this.baseDao = baseDao;
     }
 
-    async list(): Promise<Array<MODEL>> {
+    async list(): Promise<MODEL[]> {
         return await this.baseDao.list();
     }
 
@@ -25,7 +25,7 @@ abstract class BaseServiceImpl<MODEL> implements BaseService<MODEL> {
         return await this.baseDao.save(model);
     }
 
-    async get(pk: any): Promise<MODEL> {
+    async get(pk: any): Promise<MODEL[]> {
         return this.baseDao.get(pk);
     }
 

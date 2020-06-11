@@ -83,7 +83,7 @@ class DbUtils {
         return resolve;
     }
 
-    public async get(table: string, where: any): Promise<any> {
+    public async get(table: string, where: any): Promise<any[]> {
         let resolve: Promise<any> = new Promise<any>((resolve, reject) => {
             let length = Object.keys(where).length;
             let params: any = new Array(length);

@@ -23,7 +23,7 @@ abstract class BaseDaoImpl<MODEL> implements BaseDao<MODEL> {
 
     public abstract getPk(): string[];
 
-    async list(): Promise<Array<MODEL>> {
+    async list(): Promise<MODEL[]> {
         let sql: string = `SELECT * FROM ${this.getTableName()}`;
 
         return await DbUtils.getInstance().all(sql, []);
@@ -34,7 +34,7 @@ abstract class BaseDaoImpl<MODEL> implements BaseDao<MODEL> {
         return await DbUtils.getInstance().insert(this.getTableName(), model);
     }
 
-    async get(pk: any): Promise<MODEL> {
+    async get(pk: any): Promise<MODEL[]> {
         for (let key in this.getPk()) {
             if (!pk[this.getPk()[key]]) {
                 return Promise.reject({ error: `${key} is empty` });

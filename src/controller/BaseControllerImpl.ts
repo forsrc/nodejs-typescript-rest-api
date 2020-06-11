@@ -24,7 +24,7 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
         console.log(new Date().toISOString(), this.constructor.name, "list   --->");
 
         this.baseService.list().then((rows) => {
-            res.status(200).json({ status: "ok", rows: rows });
+            res.status(200).json({ status: "ok", data: rows });
         }).catch((err) => {
             res.status(400).json({ status: "ng", error: err });
         });
@@ -59,7 +59,7 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
 
         console.log(new Date().toISOString(), this.constructor.name, "get    --->", model);
 
-        this.baseService.get(model).then((list: any[]) => {
+        this.baseService.get(model).then((list: MODEL[]) => {
             if (list && list.length > 0) {
                 res.status(200).json({ status: "ok", data: list });
             } else {
