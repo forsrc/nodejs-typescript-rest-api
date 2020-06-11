@@ -29,13 +29,13 @@ class DbUtils {
         }
         this.db = new sqlite3.Database(db, (err) => {
             if (err) {
-                console.error('Could not connect to database:', db, err)
+                console.error(new Date().toISOString(), this.constructor.name, 'Could not connect to database:', db, err)
             } else {
-                console.log('Connected to database', db)
+                console.log(new Date().toISOString(), this.constructor.name, 'Connected to database', db)
             }
         });
         this.db.on("error", (error) => {
-            console.error("DbUtils error : ", error);
+            console.error(new Date().toISOString(), this.constructor.name, "DbUtils error : ", error);
         });
     }
 
@@ -53,11 +53,11 @@ class DbUtils {
         let resolve: Promise<any> = new Promise<any>((resolve, reject) => {
             this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err)
                     return;
                 }
-                if (DbUtils.debug) console.log("[run] -->", this);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[run] -->", this);
                 resolve({ id: this.lastID, changes: this.changes });
 
             });
@@ -69,11 +69,11 @@ class DbUtils {
         let resolve: Promise<any> = new Promise<any>((resolve, reject) => {
             this.db.all(sql, params, (err, rows) => {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err)
                     return;
                 }
-                if (DbUtils.debug) console.log("[all] ", sql, " --> ", rows);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[all] ", sql, " --> ", rows);
                 if (!rows) {
                     return;
                 }
@@ -103,11 +103,11 @@ class DbUtils {
 
             this.db.all(sql, params, (err, rows) => {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err);
                     return;
                 }
-                if (DbUtils.debug) console.log("[get] ", sql, " --> ", rows);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[get] ", sql, " --> ", rows);
                 if (!rows) {
                     return;
                 }
@@ -140,11 +140,11 @@ class DbUtils {
 
             this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err);
                     return;
                 }
-                if (DbUtils.debug) console.log("[insert] ", sql, " --> ", this);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[insert] ", sql, " --> ", this);
                 resolve({ lastID: this.lastID, changes: this.changes });
             });
         });
@@ -178,11 +178,11 @@ class DbUtils {
 
             this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err);
                     return;
                 }
-                if (DbUtils.debug) console.log("[update] ", sql, " --> ", this);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[update] ", sql, " --> ", this);
                 resolve({ lastID: this.lastID, changes: this.changes });
             });
         });
@@ -208,11 +208,11 @@ class DbUtils {
 
             this.db.run(sql, params, function (err) {
                 if (err) {
-                    console.error('[ERROR] sql ', sql, err);
+                    console.error(new Date().toISOString(), this.constructor.name, '[ERROR] sql ', sql, err);
                     reject(err);
                     return;
                 }
-                if (DbUtils.debug) console.log("[delete] ", sql, " --> ", this);
+                if (DbUtils.debug) console.log(new Date().toISOString(), this.constructor.name, "[delete] ", sql, " --> ", this);
                 resolve({ lastID: this.lastID, changes: this.changes });
             });
         });

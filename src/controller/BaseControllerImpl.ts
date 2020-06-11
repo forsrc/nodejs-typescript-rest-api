@@ -20,6 +20,9 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
 
 
     list(req: express.Request, res: express.Response): void {
+
+        console.log(new Date().toISOString(), this.constructor.name, "list   --->");
+
         this.baseService.list().then((rows) => {
             res.status(200).json({ status: "ok", rows: rows });
         }).catch((err) => {
@@ -37,6 +40,8 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
         let model: MODEL = {} as MODEL;
         Object.assign(model, req.body);
 
+        console.log(new Date().toISOString(), this.constructor.name, "save   --->", model);
+
         this.baseService.save(model).then((info) => {
 
             res.status(200).json({ status: "ok", message: info });
@@ -52,11 +57,13 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
         let model: MODEL = {} as MODEL;
         Object.assign(model, req.params);
 
-        this.baseService.get(model).then((one) => {
-            if (one) {
-                res.status(200).json({ status: "ok", user: one });
+        console.log(new Date().toISOString(), this.constructor.name, "get    --->", model);
+
+        this.baseService.get(model).then((list: any[]) => {
+            if (list && list.length > 0) {
+                res.status(200).json({ status: "ok", data: list });
             } else {
-                res.status(404).json({ status: "ng", error: `no such model '${JSON.stringify(model)}'` });
+                res.status(404).json({ status: "ng", error: `no such '${JSON.stringify(model)}'` });
             }
 
 
@@ -76,11 +83,13 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
         let model: MODEL = {} as MODEL;
         Object.assign(model, req.body);
 
+        console.log(new Date().toISOString(), this.constructor.name, "update --->", model);
+
         this.baseService.update(model).then((info) => {
-            if (status) {
+            if (info) {
                 res.status(200).json({ status: "ok", message: info });
             } else {
-                res.status(404).json({ status: "ng", error: `no such user '${JSON.stringify(model)}'` });
+                res.status(404).json({ status: "ng", error: `no such '${JSON.stringify(model)}'` });
             }
 
         }).catch((err) => {
@@ -91,9 +100,10 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
 
     delete(req: express.Request, res: express.Response) {
 
-        console.log("delete --->", req.params);
         let model: MODEL = {} as MODEL;
         Object.assign(model, req.params);
+
+        console.log(new Date().toISOString(), this.constructor.name, "delete --->", model);
 
         this.baseService.delete(model).then((status) => {
             res.status(200).json({ status: "ok", message: `'${JSON.stringify(model)}' is deleted.` });
@@ -103,5 +113,4 @@ abstract class BaseControllerImpl<MODEL> implements BaseController<MODEL>{
     }
 }
 
-//export default new UserController();
 export default BaseControllerImpl;
